@@ -48,9 +48,16 @@ def main():
         output_file.write(f"# Generated on {datetime.utcnow().isoformat()} UTC\n")
         output_file.write("# Total unique IPs: {}\n".format(len(ip_set)))
         output_file.write("default 0;\n")
+        
+        # Write all IP ranges first
         for ip in sorted(ip_set):
-            output_file.write(f"{ip} 1;\n")
+            if '/' in ip:
+                output_file.write(f"{ip} 1;\n")
+        
+        # Write individual IPs last
+        for ip in sorted(ip_set):
+            if '/' not in ip:
+                output_file.write(f"{ip} 1;\n")
 
 if __name__ == "__main__":
-   # main()
-   pass
+   main()
