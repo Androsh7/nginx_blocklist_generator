@@ -1,0 +1,10 @@
+# VSCode
+.vscode/
+
+# Python
+__pycache__/
+.venv/
+*.egg-info/
+
+# Project
+blocklist.txt
