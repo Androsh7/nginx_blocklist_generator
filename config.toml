@@ -1,0 +1,9 @@
+output_file = "blocklist.txt"
+request_timeout = 10  # seconds
+
+sources = [
+"https://www.spamhaus.org/drop/drop.txt",
+"https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset",
+"https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level2.netset",
+"https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt",
+]
