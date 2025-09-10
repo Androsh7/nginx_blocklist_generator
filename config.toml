@@ -1,4 +1,5 @@
 output_file = "blocklist.txt"
+request_timeout = 10  # seconds
 
 sources = [
 "https://www.spamhaus.org/drop/drop.txt",

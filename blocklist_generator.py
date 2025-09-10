@@ -11,6 +11,7 @@ import toml
 PARENT_DIR = "/".join(__file__.replace("\\", "/").split("/")[:-1])
 CONFIG_PATH = "config.toml"
 
+DEFAULT_TIMEOUT = 10  # seconds
 
 def load_config() -> dict:
     """Load configuration from the TOML file"""
@@ -20,9 +21,9 @@ def load_config() -> dict:
         return toml.load(config_file)
 
 
-def fetch_blocklist(url: str, ip_set: set) -> set:
+def fetch_blocklist(url: str, ip_set: set, timeout: int) -> set:
     """Fetch blocklist from a given URL and return a set of IPs"""
-    response = requests.get(url.strip())
+    response = requests.get(url.strip(), timeout=timeout)
     response.raise_for_status()
 
     for line in response.text.splitlines():
@@ -44,7 +45,7 @@ def main():
     for source in config.get("sources"):
         try:
             print(f"Fetching blocklist from {source}...")
-            fetch_blocklist(source, ip_set)
+            fetch_blocklist(source, ip_set, timeout=config.get("request_timeout", DEFAULT_TIMEOUT))
         except requests.RequestException as e:
             print(f"Error fetching {source}: {e}")
 
@@ -53,7 +54,7 @@ def main():
     ) as output_file:
         output_file.write("# Auto-generated blocklist (\n")
         output_file.write(f"# Generated on {datetime.utcnow().isoformat()} UTC\n")
-        output_file.write("# Total unique IPs: {}\n".format(len(ip_set)))
+        output_file.write(f"# Total unique IPs: {len(ip_set)}\n")
         output_file.write("default 0;\n")
 
         # Write all IP ranges first
